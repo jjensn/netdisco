@@ -11,6 +11,7 @@ from .gdm import GDM
 from .lms import LMS
 from .tellstick import Tellstick
 from .daikin import Daikin
+from .kdeconnect import KDEConnect
 # from .samsungac import SamsungAC
 
 _LOGGER = logging.getLogger(__name__)
@@ -42,6 +43,7 @@ class NetworkDiscovery(object):
         self.lms = LMS()
         self.tellstick = Tellstick()
         self.daikin = Daikin()
+        self.kdeconnect = KDEConnect()
         # self.samsungac = SamsungAC()
         self.discoverables = {}
 
@@ -71,6 +73,9 @@ class NetworkDiscovery(object):
         daikin_thread = threading.Thread(target=self.daikin.scan)
         daikin_thread.start()
 
+        kdeconnect_thread = threading.Thread(target=self.kdeconnect.scan)
+        kdeconnect_thread.start()
+
         # self.samsungac.scan()
 
         # Wait for all discovery processes to complete
@@ -79,6 +84,7 @@ class NetworkDiscovery(object):
         lms_thread.join()
         tellstick_thread.join()
         daikin_thread.join()
+        kdeconnect_thread.join()
 
     def stop(self):
         """Turn discovery off."""
@@ -149,3 +155,6 @@ class NetworkDiscovery(object):
         print("")
         print("Tellstick")
         pprint(self.tellstick.entries)
+        print("")
+        print("KDEconnect")
+        pprint(self.kdeconnect.entries)
